@@ -11,11 +11,17 @@ Class Setting
     
     static public $p = array();
     
-    static public function load($setting_name)
+    static public function load($setting_name, $file=FALSE)
     {
+        
         global $sys_dir;
         
         $setting_file = $sys_dir.'/settings/'.$setting_name.'.setting';
+        
+        if($file == TRUE)
+        {
+            return $setting_file;
+        }
         
         if(is_file($setting_file))
         {

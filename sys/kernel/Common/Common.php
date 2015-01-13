@@ -4,12 +4,18 @@
  *  https://mosengine.org | MosEngine CMS | https://github.com/mosengine/mosengine
  */
 
-namespace kernel\Common;
-
+namespace kernel;
 
 
 Class Common
 {
-    
+    static public function sayhello()
+    {
+        echo 'hello';
+    }
     
 }
+
+
+
+

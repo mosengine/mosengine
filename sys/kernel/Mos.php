@@ -10,7 +10,7 @@ namespace kernel
     
     Class Mos
     {
-            static private $included = array(), $classfiles = array(), $error_reporting;
+            static private $included = array(), $classfiles = array(), $error_reporting, $keywords = array();
 
             public function __construct() {
                 
@@ -28,47 +28,76 @@ namespace kernel
                 {
                     global $sys_dir;
                     
-                    $classname = preg_replace('/\\\/i', '/', $classname);
+                    
+                    $classname = self::checkClassname($classname);
+                    
+                    
+                    if(preg_match('/kernel\/Common[\w+]/i', $classname) & !preg_match('/kernel\/Common\/Common/i', $classname))
+                           return self::loadCommon($classname);
                     
                     
                     
                     if(!self::getIncluded($classname))
                     {
-//                        if(preg_match('/core\/Common/i', $classname) & !preg_match('/core\/Common\/Common/i', $classname))
-//                            return \core\Common\Common::checkCommonClass($classname);
-
                         $filename = $sys_dir.$classname.'.php';
+                        
+                        $basename = '/'.basename($classname);
+                        
+                        $filename2 = $sys_dir.$classname.$basename.'.php';
+                        
                         if(is_file($filename))
                         {
                             include_once $filename;
                             self::$included[$classname] = $classname;
                             $INCLUDED = TRUE;
-                        } 
+                        }
+                        elseif(is_file($filename2))
+                        {
+                            include_once $filename2;
+                            
+                            echo $classname;
+                            echo $classname.$basename;
+                            
+                            self::$included[$classname] = $classname;
+                            
+                            $filename = $filename2;
+                            $INCLUDED = TRUE;
+                        }
                         else 
                         { 
-                            $INCLUDED= FALSE; 
-                            
+                            $INCLUDED= FALSE;   
                         }
+                        
+                        
                         
                         $filename = basename($classname);
                         $filename = mb_strtolower($filename);
                         
+                        
+                        
                         if(self::getIncluded($classname))
                         {
+                            
                             \kernel\System\Setting::load($filename) ? $ACTIVATED = TRUE : $ACTIVATED = FALSE;
+                            
+                            
+                            
                         }
                         
                         
                         
                         if($INCLUDED)
                         {
-                            if($ACTIVATED){ \kernel\System\Message::set('debug', 'loadclass', $classname.' successfully included and activated via '.__METHOD__."()");     } 
-                            else         { \kernel\System\Message::set('debug', 'loadclass', $classname.' successfully included but not activated via '.__METHOD__."()"); }
+                            
+                            if($ACTIVATED){ \kernel\System\Message::set('debug', 'loadclass', $classname.' successfully included with setting file '.\kernel\System\Setting::load($filename, TRUE).' via '.__METHOD__."()");     } 
+                            else         { \kernel\System\Message::set('debug', 'loadclass', $classname.' successfully included without setting file via '.__METHOD__."()"); }
                         } 
                         else 
                         {
                             \kernel\System\Message::set('debug', 'loadclass', $classname.' not included via '.__METHOD__."()"); 
                         }
+                        
+                       // print_r(self::$included);
                         
                         
                     }
@@ -112,6 +141,35 @@ namespace kernel
             {
                 \kernel\System\Setting::load(__NAMESPACE__);
             }
+            
+            static private function loadCommon($classname)
+            {
+                echo $classname;
+            }
+            
+            
+            static private function checkClassname($classname)
+            {
+                $classname = preg_replace('/\\\/i', '/', $classname);
+               
+                
+                $keywords = preg_split("/\//", $classname);
+                
+                
+                
+                foreach ($keywords as $key => $value) {
+                    
+                    self::$keywords[$classname]['max'] = $key;
+                    self::$keywords[$classname][$key] = $value;
+
+                }
+                
+                
+                return $classname;
+                
+            }
+            
+            
 
             public static function getIncluded($return)
             {
