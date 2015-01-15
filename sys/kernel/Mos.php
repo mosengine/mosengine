@@ -30,45 +30,10 @@ namespace kernel
                     
                     
                     $classname = self::checkClassname($classname);
-                    
-                    
-                    if(preg_match('/kernel\/Common[\w+]/i', $classname) & !preg_match('/kernel\/Common\/Common/i', $classname))
-                           return self::loadCommon($classname);
-                    
-                    
-                    
+
                     if(!self::getIncluded($classname))
                     {
-                        $filename = $sys_dir.$classname.'.php';
-                        
-                        $basename = '/'.basename($classname);
-                        
-                        $filename2 = $sys_dir.$classname.$basename.'.php';
-                        
-                        if(is_file($filename))
-                        {
-                            include_once $filename;
-                            self::$included[$classname] = $classname;
-                            $INCLUDED = TRUE;
-                        }
-                        elseif(is_file($filename2))
-                        {
-                            include_once $filename2;
-                            
-                            echo $classname;
-                            echo $classname.$basename;
-                            
-                            self::$included[$classname] = $classname;
-                            
-                            $filename = $filename2;
-                            $INCLUDED = TRUE;
-                        }
-                        else 
-                        { 
-                            $INCLUDED= FALSE;   
-                        }
-                        
-                        
+                        $INCLUDED = self::loadClass($classname);
                         
                         $filename = basename($classname);
                         $filename = mb_strtolower($filename);
@@ -96,8 +61,6 @@ namespace kernel
                         {
                             \kernel\System\Message::set('debug', 'loadclass', $classname.' not included via '.__METHOD__."()"); 
                         }
-                        
-                       // print_r(self::$included);
                         
                         
                     }
@@ -142,9 +105,31 @@ namespace kernel
                 \kernel\System\Setting::load(__NAMESPACE__);
             }
             
-            static private function loadCommon($classname)
+            static private function loadClass($classname)
             {
-                echo $classname;
+                global $sys_dir;
+                
+                $basename = '/'.basename($classname);
+                $fileOrDir = $sys_dir.$classname;
+                
+                if(is_file($fileOrDir . '.php'))
+                {
+                    include_once $fileOrDir . '.php';
+                    self::$included[$classname] = $fileOrDir . '.php';
+                    
+                    return TRUE;
+                }
+                elseif(is_dir($fileOrDir))
+                {
+                    include_once $fileOrDir.$basename . '.php';
+                    self::$included[$classname] = $fileOrDir.$basename . '.php';
+                    
+                    return TRUE;
+                }
+                else
+                {
+                    return FALSE;
+                }
             }
             
             

@@ -6,16 +6,10 @@
 
 namespace kernel\Common;
 
-
-Class Common
+Class File
 {
     static public function sayhello()
     {
         echo 'hello';
-    }
-    
+    } 
 }
-
-
-
-
