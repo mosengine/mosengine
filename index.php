@@ -25,10 +25,6 @@ define ('DIRSEP', DIRECTORY_SEPARATOR);
 //Подключение ядра
 require_once main_dir . 'sys/mosengine.php';
 
-echo \kernel\Common\Common::sayhello();
-
-echo \kernel\Common\File::sayhello();
-
 
 print_r(\kernel\System\Message::$logs['debug']);
 

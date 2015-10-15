@@ -11,6 +11,8 @@ namespace kernel
     Class Mos
     {
             static private $included = array(), $classfiles = array(), $error_reporting, $keywords = array();
+            
+            static public $p = array();
 
             public function __construct() {
                 
@@ -20,41 +22,30 @@ namespace kernel
             {
                 if($classname == NULL)
                 {
-                    self::init();
-                    self::loadSetting();
+                    self::loadSetting(__NAMESPACE__);
+                    self::init();                    
                     self::$error_reporting = error_reporting();
                 }
                 else
                 {
                     global $sys_dir;
                     
-                    
                     $classname = self::checkClassname($classname);
 
                     if(!self::getIncluded($classname))
                     {
-                        $INCLUDED = self::loadClass($classname);
-                        
                         $filename = basename($classname);
                         $filename = mb_strtolower($filename);
                         
+                        self::loadSetting($filename) 
+                                ? $ACTIVATED = TRUE & $INCLUDED = self::loadClass($classname)
+                                : $ACTIVATED = FALSE;
                         
-                        
-                        if(self::getIncluded($classname))
-                        {
-                            
-                            \kernel\System\Setting::load($filename) ? $ACTIVATED = TRUE : $ACTIVATED = FALSE;
-                            
-                            
-                            
-                        }
-                        
-                        
-                        
+ 
                         if($INCLUDED)
                         {
                             
-                            if($ACTIVATED){ \kernel\System\Message::set('debug', 'loadclass', $classname.' successfully included with setting file '.\kernel\System\Setting::load($filename, TRUE).' via '.__METHOD__."()");     } 
+                            if($ACTIVATED){ \kernel\System\Message::set('debug', 'loadclass', $classname.' successfully included with setting file '.self::loadSetting($filename, TRUE).' via '.__METHOD__."()");     } 
                             else         { \kernel\System\Message::set('debug', 'loadclass', $classname.' successfully included without setting file via '.__METHOD__."()"); }
                         } 
                         else 
@@ -87,6 +78,13 @@ namespace kernel
             
             static private function init()
             {
+                //Подключение основных функции
+                
+                
+                //Подключение системных функции
+                
+               
+                
                 // Регистрация метода-обработчика автозагрузки классов
                 spl_autoload_register(array('\kernel\Mos', 'activate'));
                 
@@ -99,10 +97,49 @@ namespace kernel
                 mb_http_output('UTF-8');
                 
             }
+           
             
-            static private function loadSetting()
+            static public function loadSetting($setting_name, $file=FALSE)
             {
-                \kernel\System\Setting::load(__NAMESPACE__);
+
+                global $sys_dir;
+
+                $setting_file = $sys_dir.'/settings/'.$setting_name.'.setting';
+
+                if($file == TRUE)
+                {
+                    return $setting_file;
+                }
+
+                if(is_file($setting_file))
+                {
+
+                    $lines = file($setting_file);
+
+                    foreach ($lines as $line_num => $line) {
+
+
+                        if(preg_match('/(\w+)\s*=\s*(\w+);/i', $line, $matches, PREG_OFFSET_CAPTURE))
+                        {
+                            self::$p[$setting_name][$matches[1][0]] = $matches[2][0];
+
+                        }
+
+                    }
+
+                    return TRUE;
+
+                }
+                else
+                {
+                 //   \kernel\System\Message::set('debug', 'loadclass', $setting_file." file doesn't exists");
+                }
+
+
+
+
+
+
             }
             
             static private function loadClass($classname)
