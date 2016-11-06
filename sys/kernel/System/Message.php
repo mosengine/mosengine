@@ -6,17 +6,27 @@
 
 namespace kernel\System;
 
+/* 
+ * Системный класс. Один из основных. Смысл в том, что с помощью него, в системе
+ * сохраняются "сообщения" системы, которые в зависимости от Mode ядра или других
+ * параметров, можно логировать, выводить на экран и делать с ними всё что нужно
+ */
+
 Class Message
 {
     
-    static public $logs = array();
-    static private $date_operator, $names = array(), $magic_array = array();
+    static public $names = array(), $logs = array();
+    static private $date_operator, $magic_array = array();
     
     
     static public function set($class, $name, $message)
     {
+        //\kernel\Data::get('kernelmode', __METHOD__);
         
-        
+        if(\kernel\Mos::$config['Mode'] != 'Debug' & $class == 'debug')
+        {
+            return FALSE;
+        }
         
         $now = date("YmdHis");
         $num = count(self::$names) + 1;
@@ -24,14 +34,8 @@ Class Message
         self::valueToArray($class, $name, 'names', $num);
         self::valueToArray($class, $message, 'logs', $name, $now);
         
-        
-        
     }
     
-    static public function sayhello()
-    {
-        echo 'hello!';
-    }
     
     static private function valueToArray($class, $value, $arr, $key, $key2=NULL)
     {

@@ -12,16 +12,5 @@ require_once 'kernel/Mos.php';
 //Активация ядра
 \kernel\Mos::activate();
 
-
-
-
-
-
-
-
-
-
-//echo core\Common\File::sayhello();
-
-
-
+//Роутинг!!!!
+\kernel\System\Router::start();

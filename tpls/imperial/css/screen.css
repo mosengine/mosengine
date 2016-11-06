@@ -1,0 +1,106 @@
+
+
+
+.slider {
+  position: relative;
+    right: 50%;
+    float: right;
+    margin-bottom: 30px;
+}
+
+.slider-center {
+  position: relative;
+    z-index: 1;
+    right: -50%;
+  
+}
+
+
+/* line 29, sass/screen.scss */
+#viewport, #box, .slide {
+  width: 1263px;
+  height: 460px;
+
+}
+
+/* line 34, sass/screen.scss */
+#viewport {
+  overflow: hidden;
+}
+
+/* line 37, sass/screen.scss */
+#controls {
+  position: absolute;
+  margin-left: 600px;
+  margin-top:-30px;
+  overflow: hidden;
+}
+/* line 43, sass/screen.scss */
+#controls li {
+  display: inline;
+ 
+}
+
+/* line 46, sass/screen.scss */
+.goto-slide {
+  margin-left: 10px;
+  width: 14px;
+  height: 14px;
+  display: block;
+  float: left;
+  border: solid 1px #000;
+  background-color: #555;
+  border-radius: 8px;
+  -webkit-box-shadow: inset 0px 0px 8px #333;
+  -moz-box-shadow: inset 0px 0px 8px #333;
+  box-shadow: inset 0px 0px 8px #333;
+}
+/* line 59, sass/screen.scss */
+.goto-slide.current {
+  background-color: #2edbac;
+}
+
+/* line 62, sass/screen.scss */
+#next, #prev {
+  position: absolute;
+  top: 80px;
+  width: 30px;
+  height: 300px;
+  background: url(img/next-prev-sprite.png) no-repeat;
+  display: block;
+  -webkit-transition: background .4s;
+  -moz-transition: background .4s;
+  transition: background .4s;
+}
+/* line 73, sass/screen.scss */
+#next:hover, #prev:hover {
+  background: url(img/next-prev-sprite-hover.png) no-repeat;
+  border: none;
+}
+
+/* line 79, sass/screen.scss */
+#prev {
+  left: 90px;
+}
+
+/* line 80, sass/screen.scss */
+#next, #next:hover {
+  left: 840px;
+  background-position: -30px 0;
+}
+
+
+/* line 127, sass/screen.scss */
+#time-indicator {
+  
+  width: 0px;
+  height: 3px;
+  background-color: #2edbac;
+  
+  
+  
+
+  
+}
+
+
