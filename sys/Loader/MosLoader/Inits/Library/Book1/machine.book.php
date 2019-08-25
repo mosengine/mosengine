@@ -6,5 +6,9 @@
  * and open the template in the editor.
  */
 
-echo 'Загруженно приложение тест';
-print_r (\kernel\Applications::$conf);
+define(Machine\Connect\Linux, connect_machine('linux'));
+
+function connect_machine($machine)
+{
+    echo 123;
+}

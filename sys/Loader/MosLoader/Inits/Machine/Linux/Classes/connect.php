@@ -6,5 +6,3 @@
  * and open the template in the editor.
  */
 
-echo 'Загруженно приложение тест';
-print_r (\kernel\Applications::$conf);

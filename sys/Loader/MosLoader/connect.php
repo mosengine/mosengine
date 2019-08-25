@@ -6,5 +6,6 @@
  * and open the template in the editor.
  */
 
-echo 'Загруженно приложение тест';
-print_r (\kernel\Applications::$conf);
+include 'Spaces/Core.php';
+Space::load('test', 'test');
+Space::init();
